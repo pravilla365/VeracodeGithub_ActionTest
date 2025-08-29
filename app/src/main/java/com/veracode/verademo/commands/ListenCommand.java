@@ -15,7 +15,6 @@ public class ListenCommand implements BlabberCommand {
 	private Connection connect;
 
 	private String username;
-
 	public ListenCommand(Connection connect, String username) {
 		super();
 		this.connect = connect;
