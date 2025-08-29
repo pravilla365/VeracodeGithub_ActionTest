@@ -83,3 +83,4 @@ jobs:
           prComment: true
           fixType: single
           files: changed
+          emailForCommits: pravilla@github.com
