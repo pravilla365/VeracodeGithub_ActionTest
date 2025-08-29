@@ -80,5 +80,5 @@ jobs:
           language: java
           createPR: true
           DEBUG: true
-          fixType: batch
+          fixType: single
           files: changed
