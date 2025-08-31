@@ -25,8 +25,8 @@ jobs:
             mvn clean package
     - uses: actions/upload-artifact@v4
       with:
-        name: jb-hello-world-maven.war
-        path: target/jb-hello-world-maven.war
+        name: verademo.war
+        path: app/target/verademo.war
         
   pipeline_scan:
       needs: build
@@ -38,14 +38,14 @@ jobs:
         - name: get archive
           uses: actions/download-artifact@v4
           with:
-            name: jb-hello-world-maven.war
+            name: verademo.war
         - name: pipeline-scan action step
           id: pipelien-scan
           uses: veracode/Veracode-pipeline-scan-action@esd-true
           with:
-            vid: ${{ secrets.VID }}
+            vid: ${{ secrets.VID }} 
             vkey: ${{ secrets.VKEY }}
-            file: "jb-hello-world-maven.war" 
+            file: "verademo.war" 
             request_policy: "Veracode Recommended SCA Very Low"
             debug: 1
             fail_build: false
@@ -72,8 +72,8 @@ jobs:
           inputFile: results.json
           vid: ${{ secrets.VID }}
           vkey: ${{ secrets.VKEY }}
-          source_base_path_1: "com/:test/src/main/java/com/"
-          source_base_path_2: "WEB-INF:test/src/main/webapp/WEB-INF"
+          source_base_path_1: "com/:app/src/main/java/com/"
+          source_base_path_2: "WEB-INF:app/src/main/webapp/WEB-INF"
           language: java
           createPR: true
           DEBUG: true
