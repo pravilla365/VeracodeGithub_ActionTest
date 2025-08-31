@@ -81,6 +81,6 @@ jobs:
           createPR: true
           DEBUG: true
           prComment: true
-          fixType: single
+          fixType: batch
           files: changed
-          emailForCommits: pravilla@github.com
+          emailForCommits: pravilla@veracode.com
