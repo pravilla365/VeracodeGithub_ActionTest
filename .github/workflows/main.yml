@@ -22,6 +22,7 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
     - name: Build with Maven
       run: |
+            cd app
             mvn clean package
     - uses: actions/upload-artifact@v4
       with:
@@ -43,7 +44,7 @@ jobs:
           id: pipelien-scan
           uses: veracode/Veracode-pipeline-scan-action@esd-true
           with:
-            vid: ${{ secrets.VID }} 
+            vid: ${{ secrets.VID }}
             vkey: ${{ secrets.VKEY }}
             file: "verademo.war" 
             request_policy: "Veracode Recommended SCA Very Low"
