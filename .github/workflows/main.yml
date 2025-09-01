@@ -70,7 +70,7 @@ jobs:
           
       - name: Create fixes from static findings
         id: convert
-        uses: Veracode/veracode-fix@emailConfig
+        uses: Veracode/veracode-fix@main
         with:
           inputFile: results.json
           vid: ${{ secrets.VID }}
@@ -81,6 +81,5 @@ jobs:
           createPR: true
           DEBUG: true
           prComment: true
-          fixType: single
-          files: changed
-          emailForCommits: pravilla@github.com
+          fixType: batch
+          files: all
