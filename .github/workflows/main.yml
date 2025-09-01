@@ -82,4 +82,4 @@ jobs:
           DEBUG: true
           prComment: true
           fixType: batch
-          files: changed
+          files: all
