@@ -8,6 +8,8 @@ import java.sql.Statement;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class IgnoreCommand implements BlabberCommand {
 	private static final Logger logger = LogManager.getLogger("VeraDemo:IgnoreCommand");
@@ -34,15 +36,19 @@ public class IgnoreCommand implements BlabberCommand {
 			action.execute();
 
 			sqlQuery = "SELECT blab_name FROM users WHERE username = '" + blabberUsername + "'";
-			Statement sqlStatement = connect.createStatement();
-			logger.info(sqlQuery);
-			ResultSet result = sqlStatement.executeQuery(sqlQuery);
+			PreparedStatement sqlStatement = connect.prepareStatement(sqlQuery);
+			sqlStatement.setString(1, blabberUsername);
+			logger.info(StringUtils.normalizeSpace(sqlQuery));
+			ResultSet result = sqlStatement.executeQuery();
 			result.next();
 			/* START EXAMPLE VULNERABILITY */
-			String event = username + " is now ignoring " + blabberUsername + " (" + result.getString(1) + ")";
+			String event = username + " is now ignoring " + result.getString(1) + " (" + username + ")";
 			sqlQuery = "INSERT INTO users_history (blabber, event) VALUES (\"" + username + "\", \"" + event + "\")";
-			logger.info(sqlQuery);
+			logger.info(StringEscapeUtils.escapeJava(sqlQuery));
 			sqlStatement.execute(sqlQuery);
+			PreparedStatement pstmt = connect.prepareStatement("INSERT INTO users (blabber, event) VALUES (?,?)");
+			pstmt.setString(1, username);
+			pstmt.setString(2, event);
 			/* END EXAMPLE VULNERABILITY */
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
