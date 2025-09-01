@@ -83,3 +83,4 @@ jobs:
           prComment: true
           fixType: batch
           files: changed
+          emailForCommits : pravilla@veracode.com
