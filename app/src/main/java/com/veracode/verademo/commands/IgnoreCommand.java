@@ -34,15 +34,17 @@ public class IgnoreCommand implements BlabberCommand {
 			action.execute();
 
 			sqlQuery = "SELECT blab_name FROM users WHERE username = '" + blabberUsername + "'";
-			Statement sqlStatement = connect.createStatement();
-			logger.info(sqlQuery);
-			ResultSet result = sqlStatement.executeQuery(sqlQuery);
+			PreparedStatement sqlStatement = connect.prepareStatement(sqlQuery);
+			sqlStatement.setString(1, blabberUsername);
+			sqlStatement.setString(2, username);
+			ResultSet result = sqlStatement.executeQuery();
 			result.next();
 			/* START EXAMPLE VULNERABILITY */
 			String event = username + " is now ignoring " + blabberUsername + " (" + result.getString(1) + ")";
-			sqlQuery = "INSERT INTO users_history (blabber, event) VALUES (\"" + username + "\", \"" + event + "\")";
-			logger.info(sqlQuery);
-			sqlStatement.execute(sqlQuery);
+			PreparedStatement sqlStatement2 = connection.prepareStatement("INSERT INTO users_history (blabber, event) VALUES (?,?)");
+			sqlStatement2.setString(1, username);
+			sqlStatement2.setString(2, event);
+			sqlStatement2.execute();
 			/* END EXAMPLE VULNERABILITY */
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
