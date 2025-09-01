@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
-import java.net.URLEncoder;
 
 public class Utils {
 	private static boolean isConnectionFromHttps() {
@@ -53,7 +52,7 @@ public class Utils {
 	}
 
 	public static void setCookie(HttpServletResponse response, String name, String value) {
-		response.addCookie(new Cookie(URLEncoder.encode(name, Charset.defaultCharset()), value));
+		response.addCookie(new Cookie(name, value));
 		upgradeCookieSecurityForHttpsIfRequired(response);
 	}
 
