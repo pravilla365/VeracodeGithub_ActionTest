@@ -8,6 +8,8 @@ import java.sql.Statement;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.commons.text.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class RemoveAccountCommand implements BlabberCommand {
 	private static final Logger logger = LogManager.getLogger("VeraDemo:RemoveAccountCommand");
@@ -37,20 +39,22 @@ public class RemoveAccountCommand implements BlabberCommand {
 			action.execute();
 
 			sqlQuery = "SELECT blab_name FROM users WHERE username = '" + blabberUsername + "'";
-			Statement sqlStatement = connect.createStatement();
-			logger.info(sqlQuery);
-			ResultSet result = sqlStatement.executeQuery(sqlQuery);
+			PreparedStatement sqlStatement = connect.prepareStatement(sqlQuery);
+			sqlStatement.setString(1, blabberUsername);
+			logger.info(StringUtils.normalizeSpace(sqlQuery));
+			ResultSet result = sqlStatement.executeQuery();
 			result.next();
 
 			/* START EXAMPLE VULNERABILITY */
 			String event = "Removed account for blabber " + result.getString(1);
 			sqlQuery = "INSERT INTO users_history (blabber, event) VALUES ('" + blabberUsername + "', '" + event + "')";
-			logger.info(sqlQuery);
+			logger.info(StringEscapeUtils.escapeJava(sqlQuery));
 			sqlStatement.execute(sqlQuery);
 
 			sqlQuery = "DELETE FROM users WHERE username = '" + blabberUsername + "'";
-			logger.info(sqlQuery);
-			sqlStatement.execute(sqlQuery);
+			logger.info(StringUtils.normalizeSpace(sqlQuery));
+			PreparedStatement statement = connect.prepareStatement(sqlQuery);
+			statement.setString(1, blabberUsername);
 			/* END EXAMPLE VULNERABILITY */
 
 		} catch (SQLException e) {
